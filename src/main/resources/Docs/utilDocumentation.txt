@@ -1,0 +1,40 @@
+    //Minimalistic example:
+
+    /*
+    import static org.hamcrest.Matchers.hasSize;
+    ----
+    @Test
+    public void test_NumberOfCircuitsFor2017Season_ShouldBe20() {
+        given().when().get("http://ergast.com/api/f1/2017/circuits.json").then().assertThat().body("MRData.CircuitTable.Circuits.circuitId", hasSize(20));
+    }*/
+
+
+
+    /*To validate in real time:
+        given().get().getBody().asString()
+            or
+        given().get("https://reqres.in/api/users/2").then().extract().asString()
+            or
+        given().get("https://reqres.in/api/users/2").then().extract().path("ad.url")
+            or
+        given().contentType("application/json").get().then().contentType("application/json").extract().response().asString();
+        */
+
+    /*To obtain the current request:
+        given().log().all()
+            or
+        System.out.println(RestAssured.baseURI + ":" + RestAssured.port + RestAssured.basePath + EndPoint.GET_ENDPOINT);*/
+
+/*given().log().all(). .. // Log all request specification details including parameters, headers and body
+    given().log().params(). .. // Log only the parameters of the request
+    given().log().body(). .. // Log only the request body
+    given().log().headers(). .. // Log only the request headers
+    given().log().cookies(). .. // Log only the request cookies
+    given().log().method(). .. // Log only the request method
+    given().log().path(). .. // Log only the request path*/
+
+
+
+     // Full Information: https://github.com/rest-assured/rest-assured/wiki/Usage
+
+     // All the endpoints: "https://reqres.in/"

@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="AutomationApiSuite" verbose="1" >
+    <test name="Single Test" >
+        <classes>
+            <class name="Tests.A_GET_Failures" />
+        </classes>
+    </test>
+
+    <test name="Full Regression">
+        <packages>
+            <package name="Tests"></package>
+        </packages>
+    </test>
+</suite>
