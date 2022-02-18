@@ -33,10 +33,12 @@ public class C_GET_ValidateResponseBody extends MainPackage.BaseApiTest {
                     .assertThat()
                     .statusCode(200)
                     .body("data.id", is(2))
-                    .body("ad.company", equalTo("StatusCode Weekly"))
-                    .body("ad.url", equalTo("http://statuscode.org/"));
+                    .body("data.last_name", equalTo("Weaver"))
+                    .body("support.url", equalTo("https://reqres.in/#support-heading"));
         }catch (AssertionError assertionError){
-            FailsManagement.testCaseFailLogs(assertionError.toString(), testName);
+            //assertionError.printStackTrace(); //It is possible to print the full stackTrace to get the line w/the issues
+            String failure = "Actual Response: " + given().get().getBody().asString() + ".\n\n" + assertionError.toString();
+            FailsManagement.testCaseFailLogs(failure, testName);
         }
     }
 
