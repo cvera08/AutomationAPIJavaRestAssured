@@ -31,6 +31,18 @@ If you get a failure could be a simple endpoint error,
 
 if you get an error make sure all the mvn dependencies/packages are fully installed before running (it could take some time)
 
+**Available Suites:**
+
+There are at least three types of regression suites in this project:
+- Smoke test: /src/test/testngRunners/SingleTest.xml
+- Sanity test: /src/test/testngRunners/SanityApiRegression.xml
+- Full Regression: /src/test/testngRunners/FullApiRegression.xml
+
+if you have already installed TestNG just need to right click > run '<yourfile>Regression.xml' or to run all the tests use this file:
+- testng.xml
+
+![alt text](https://github.com/cvera08/AutomationApiProject/blob/master/src/main/resources/Images/AutomationApiProject_–_API_Suites.png)
+
 **To dig in a bit more - Main Library documentation:** 
 - https://rest-assured.io/
 - - Github / Get Started: https://github.com/rest-assured/rest-assured/wiki/GettingStarted
