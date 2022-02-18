@@ -45,7 +45,6 @@ public class C_GET_ValidateResponseBody extends MainPackage.BaseApiTest {
                 .get()
                 .then()
                 .body("data.id", equalTo(singleUserJson.getInt("data.id")));
-
     }
 
     @Test
@@ -54,7 +53,14 @@ public class C_GET_ValidateResponseBody extends MainPackage.BaseApiTest {
 
         String expectedJson = FileUtils.readFileToString(respBody);
         String actualJson = given().get().then().extract().asString();
-        JSONAssert.assertEquals(expectedJson, actualJson, JSONCompareMode.STRICT);
+        try {
+            JSONAssert.assertEquals(expectedJson, actualJson, JSONCompareMode.STRICT);
+        }catch (AssertionError assertionError){ //Catching failed tc to print current json output for an easy fix
+            System.out.println(assertionError);
+            System.out.println("Actual Json: " + actualJson);
+            org.testng.Assert.fail("Failed TC: " + testName + ". Please see previous logs to see the on detail reason"); //Still failing test (on purpose)
+        }
+
     }
 
     @Test
