@@ -1,6 +1,7 @@
 package Tests;
 
 import MainPackage.BaseApiTest;
+import Resources.Utils.FailsManagement;
 import io.restassured.path.json.JsonPath;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -24,15 +25,19 @@ public class C_GET_ValidateResponseBody extends MainPackage.BaseApiTest {
     @Test
     public void singleUserIsReturnedSingleComparison() {
         basePath = "users/2"; //Full url: https://reqres.in/api/users/2
-        given()
-                .when()
-                .get()
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .body("data.id", is(2))
-                .body("ad.company", equalTo("StatusCode Weekly"))
-                .body("ad.url", equalTo("http://statuscode.org/"));
+        try{
+            given()
+                    .when()
+                    .get()
+                    .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .body("data.id", is(2))
+                    .body("ad.company", equalTo("StatusCode Weekly"))
+                    .body("ad.url", equalTo("http://statuscode.org/"));
+        }catch (AssertionError assertionError){
+            FailsManagement.testCaseFailLogs(assertionError.toString(), testName);
+        }
     }
 
     @Test
@@ -56,11 +61,9 @@ public class C_GET_ValidateResponseBody extends MainPackage.BaseApiTest {
         try {
             JSONAssert.assertEquals(expectedJson, actualJson, JSONCompareMode.STRICT);
         }catch (AssertionError assertionError){ //Catching failed tc to print current json output for an easy fix
-            System.out.println(assertionError);
-            System.out.println("Actual Json: " + actualJson);
-            org.testng.Assert.fail("Failed TC: " + testName + ". Please see previous logs to see the on detail reason"); //Still failing test (on purpose)
+            String failure = assertionError + "\nCurrent Json: " + actualJson;
+            FailsManagement.testCaseFailLogs(failure, testName);
         }
-
     }
 
     @Test
@@ -72,7 +75,13 @@ public class C_GET_ValidateResponseBody extends MainPackage.BaseApiTest {
     @Test
     public void singleUserIsReturnedFullContentMatching() throws IOException {
         basePath = "users/2";
-        given().get().then().assertThat().body(equalTo(FileUtils.readFileToString(respBody, "us-ascii")));
+        String currentJson = FileUtils.readFileToString(respBody, "us-ascii");
+        try{
+            given().get().then().assertThat().body(equalTo(currentJson));
+        }catch (AssertionError assertionError){
+            String failure = assertionError + "\nExpected Json: " + currentJson;
+            FailsManagement.testCaseFailLogs(failure, testName);
+        }
     }
 
 }
