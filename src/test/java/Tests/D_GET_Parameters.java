@@ -1,10 +1,12 @@
 package Tests;
 
+import Resources.Utils.FailsManagement;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.basePath;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 public class D_GET_Parameters extends MainPackage.BaseApiTest {
 
@@ -21,12 +23,18 @@ public class D_GET_Parameters extends MainPackage.BaseApiTest {
 
     @Test
     public void listOfUsersWithParametersVersion2() {
-        given()
+        Response request = given()
                 .pathParam("pageNumber", 2)  //Defined parameterization
                 .when()
-                .get("https://reqres.in/api/users?page={pageNumber}") //Use of parameter
-                .then()
-                .statusCode(200)
-                .body("ad.url", equalTo("http://statuscode.org/"));
+                .get("https://reqres.in/api/users?page={pageNumber}"); //Use of parameter
+        try{
+            request
+                    .then()
+                    .statusCode(200)
+                    .body("support.url", equalTo("https://reqres.in/#support-heading"));
+        }catch (AssertionError assertionError){
+            String failure = "Actual Response: " + request.getBody().asString() + "\n\n" + assertionError.toString();
+            FailsManagement.testCaseFailLogs(failure, testName);
+        }
     }
 }
