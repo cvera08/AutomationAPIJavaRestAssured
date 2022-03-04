@@ -1,8 +1,6 @@
 package Tests;
 
-import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
@@ -13,10 +11,10 @@ public class K_GET_POST_OAUTH_1_2 {
 
     /**
      * Most oauth v1 endpoints will have the chance to work in this restassured native way:
-     *  given().accept(ContentType.JSON).auth().oauth(consumerKey, consumerSecret, accessToken, tokenSecret)
+     * given().accept(ContentType.JSON).auth().oauth(consumerKey, consumerSecret, accessToken, tokenSecret)
      */
     @Test
-    public void oauth1WithHeaderAuthorization() {
+    public void getOauth1WithHeaderAuthorization() {
         given()
                 .header("Authorization", getOauthKey())
                 .get("https://postman-echo.com/oauth1")
@@ -28,7 +26,7 @@ public class K_GET_POST_OAUTH_1_2 {
     }
 
     //TODO move this method to the correspondent folder
-    private String getOauthKey(){
+    private String getOauthKey() {
         return "OAuth " +
                 "oauth_consumer_key=\"RKCGzna7bv9YD57c\"," +
                 "oauth_signature_method=\"HMAC-SHA1\"," +
@@ -39,27 +37,18 @@ public class K_GET_POST_OAUTH_1_2 {
     }
 
     /**
+     * The response is a Single Page Application, so just validating the response code
      * https://www.baeldung.com/rest-assured-authentication
+     * <p>
+     * Other examples:
+     * https://accounts.google.com/o/oauth2/auth?scope=openid email&redirect_uri=https://app.example.com/oauth2/callback&response_type=code&client_id=812741506391&state=af0ifjsldkj
+     * https://accounts.google.com/o/oauth2/auth?scope=gmail.insert gmail.send&redirect_uri=https://app.example.com/oauth2/callback&response_type=code&client_id=812741506391&state=af0ifjsldkj
      */
-    @Test
-    public void oauth2() {
-    given()
-            .auth()
-            .oauth2("response_type=code&client_id=M1M5R3BMVy13QmpScXkzTUt5OE46MTpjaQ&redirect_uri=https://www.example.com&scope=tweet.read%20users.read%20follows.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain")
-            .get("https://twitter.com/i/oauth2/authorize")
-            .then()
-            .assertThat()
-            .statusCode(HttpStatus.SC_OK);
-    }
-
     @Test
     public void getOauth2() {
         given()
-                .header("Content-Type: application/x-www-form-urlencoded", "Authorization: Basic V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA==")
-                .param("code=VGNibzFWSWREZm01bjN1N3dicWlNUG1oa2xRRVNNdmVHelJGY2hPWGxNd2dxOjE2MjIxNjA4MjU4MjU6MToxOmFjOjE",
-                        "grant_type=authorization_code",
-                        "redirect_uri=https://www.example.com",
-                        "code_verifier=challenge")
+                .auth()
+                .oauth2("response_type=code&client_id=M1M5R3BMVy13QmpScXkzTUt5OE46MTpjaQ&redirect_uri=https://www.example.com&scope=tweet.read%20users.read%20follows.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain")
                 .get("https://twitter.com/i/oauth2/authorize")
                 .then()
                 .assertThat()
@@ -67,8 +56,11 @@ public class K_GET_POST_OAUTH_1_2 {
     }
 
     /**
+     * The status code for this test is 400 since no real data is being shared because of the public repository
+     * invalid authorization code
+     * <p>
      * Sources:
-     *https://developer.twitter.com/en/docs/authentication/oauth-2-0/user-access-token
+     * https://developer.twitter.com/en/docs/authentication/oauth-2-0/user-access-token
      * https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth
      * https://www.oauth.com/oauth2-servers/server-side-apps/example-flow/
      * https://www.oauth.com/oauth2-servers/access-tokens/
@@ -81,92 +73,19 @@ public class K_GET_POST_OAUTH_1_2 {
      */
     @Test
     public void postOauth2() {
-        System.out.println("testK----");
-        int code = given()
-                .header("Content-Type: application/x-www-form-urlencoded", "Authorization: Basic V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA==")
-                .param("code=VGNibzFWSWREZm01bjN1N3dicWlNUG1oa2xRRVNNdmVHelJGY2hPWGxNd2dxOjE2MjIxNjA4MjU4MjU6MToxOmFjOjE",
-                        "grant_type=authorization_code",
-                        "redirect_uri=https://www.example.com",
-                        "code_verifier=challenge")
-                .post("https://api.twitter.com/2/oauth2/token")
-                .getStatusCode();
-
-        code = given()
-                //.header("Content-Type: application/x-www-form-urlencoded", "Authorization: Basic V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA==")
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .header("Authorization", "Basic V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA==")
-                //.header("Basic", "V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA==")
-                .queryParam("grant_type", "authorization_code")
-                .queryParam("client_id", "M1M5R3BMVy13QmpScXkzTUt5OE46MTpjaQ")
-                .queryParam("code_verifier", "challenge")
-                .queryParam("code", "VGNibzFWSWREZm01bjN1N3dicWlNUG1oa2xRRVNNdmVHelJGY2hPWGxNd2dxOjE2MjIxNjA4MjU4MjU6MToxOmFjOjE")
-                .post("https://api.twitter.com/2/oauth2/token")
-                .statusCode();
-
-        System.out.println("Code:" + code);
-
-        String body = given()
-                //.header("Content-Type: application/x-www-form-urlencoded", "Authorization: Basic V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA==")
+        given()
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .header("Authorization", "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==")
-                //.header("Authorization", "Basic V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA==")
-                //.header("Basic", "V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA==")
                 .queryParam("grant_type", "authorization_code")
-                //.queryParam("client_id", "rG9n6402A3dbUJKzXTNX4oWHJ")
                 .queryParam("client_id", "M1M5R3BMVy13QmpScXkzTUt5OE46MTpjaQ")
                 .queryParam("code_verifier", "challenge")
                 .queryParam("code", "VGNibzFWSWREZm01bjN1N3dicWlNUG1oa2xRRVNNdmVHelJGY2hPWGxNd2dxOjE2MjIxNjA4MjU4MjU6MToxOmFjOjE")
                 .queryParam("redirect_uri", "https://www.example.com")
                 .post("https://api.twitter.com/2/oauth2/token")
-                .getBody().asString(); //.body().asString();
-
-
-        System.out.println("Body: " +  body);
+                .then()
+                .statusCode(400)
+                .body("error", is("invalid_request"))
+                .body("error_description", is("Value passed for the authorization code was invalid."));
     }
 
-    //https://developer.twitter.com/en/docs/authentication/oauth-2-0/user-access-token
-
-    /*curl --location --request POST 'https://api.twitter.com/2/oauth2/token' \
-            --header 'Content-Type: application/x-www-form-urlencoded' \
-            --data-urlencode 'code=VGNibzFWSWREZm01bjN1N3dicWlNUG1oa2xRRVNNdmVHelJGY2hPWGxNd2dxOjE2MjIxNjA4MjU4MjU6MToxOmFjOjE' \
-            --data-urlencode 'grant_type=authorization_code' \
-            --data-urlencode 'client_id=rG9n6402A3dbUJKzXTNX4oWHJ' \
-            --data-urlencode 'redirect_uri=https://www.example.com' \
-            --data-urlencode 'code_verifier=challenge'*/
-
-
-
-    /*curl --location --request POST 'https://api.twitter.com/2/oauth2/token' \
-            --header 'Content-Type: application/x-www-form-urlencoded' \
-            --header 'Authorization: Basic V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA=='\
-            --data-urlencode 'code=VGNibzFWSWREZm01bjN1N3dicWlNUG1oa2xRRVNNdmVHelJGY2hPWGxNd2dxOjE2MjIxNjA4MjU4MjU6MToxOmFjOjE' \
-            --data-urlencode 'grant_type=authorization_code' \
-            --data-urlencode 'redirect_uri=https://www.example.com' \
-            --data-urlencode 'code_verifier=challenge'*/
-
-    /*curl --location --request POST 'https://api.twitter.com/2/oauth2/token' \
-            --header 'Content-Type: application/x-www-form-urlencoded' \
-            --header 'Authorization: Basic V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA=='\
-            --data-urlencode 'code=VGNibzFWSWREZm01bjN1N3dicWlNUG1oa2xRRVNNdmVHelJGY2hPWGxNd2dxOjE2MjIxNjA4MjU4MjU6MToxOmFjOjE' \
-            --data-urlencode 'grant_type=authorization_code' \
-            --data-urlencode 'redirect_uri=https://www.example.com' \
-            --data-urlencode 'code_verifier=challenge'*/
-
-
-//https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth
-
-    /*GET https://accounts.google.com/o/oauth2/auth?scope=gmail.insert gmail.send
-            &redirect_uri=https://app.example.com/oauth2/callback
-            &response_type=code&client_id=812741506391
-            &state=af0ifjsldkj
-            */
-
-    /*GET https://accounts.google.com/o/oauth2/auth?
-    scope=openid email&
-    redirect_uri=https://app.example.com/oauth2/callback&
-    response_type=code&
-    client_id=812741506391&
-    state=af0ifjsldkj*/
-
-    //https://developers.onelogin.com/api-docs/1/oauth20-tokens/generate-tokens-2
 }
