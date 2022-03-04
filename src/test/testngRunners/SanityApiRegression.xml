@@ -10,12 +10,6 @@
                 </methods>
             </class>
 
-            <!--            <class name="Tests.D_GET_Parameters">-->
-            <!--                <methods>-->
-            <!--                    <include name="listOfUsersWithParametersVersion1"/>-->
-            <!--                </methods>-->
-            <!--            </class>-->
-
             <class name="Tests.E_POST">
                 <methods>
                     <include name="createUser201"/>

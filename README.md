@@ -43,6 +43,8 @@ if you have already installed TestNG just need to right click > run '<yourfile>R
 
 ![alt text](https://github.com/cvera08/AutomationApiProject/blob/master/src/main/resources/Images/AutomationApiProject_–_API_Suites.png)
 
+![alt text](https://github.com/cvera08/AutomationApiProject/blob/master/src/main/resources/Images/Test_Results_—_testng_xml.png)
+
 **To dig in a bit more - Main Library documentation:** 
 - https://rest-assured.io/
 - - Github / Get Started: https://github.com/rest-assured/rest-assured/wiki/GettingStarted
